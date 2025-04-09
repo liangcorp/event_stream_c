@@ -53,3 +53,5 @@ dkms.conf
 
 **/bin/*
 **/libs/*
+**/.cache/*
+compile_commands.json
