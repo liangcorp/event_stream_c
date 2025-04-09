@@ -1,3 +1,3 @@
-# Message Queue
+# Event Stream
 
-Message queue written in C.
+Kafka written in C.

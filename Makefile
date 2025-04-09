@@ -1,14 +1,13 @@
-CC = gcc
+CC = clang
 
 static:
 	mkdir -p libs
 	mkdir -p bin
-	# cd libs
-	# ${CC} -c myLib.c -o lib_mylib.o
-	# ar rcs lib_mylib.a lib_mylib.o
-	# cd ..
-	${CC} -I ./libs/ -I ./src/include -c ./src/main.c -o ./libs/main.o
-	${CC} -o ./bin/main ./libs/main.o # ../libs/lib_mylib.a
+	${CC} -Wall -Werror -I ./libs/ -I ./src/include -c ./src/sockets/socket_functions.c -o ./libs/socket_functions.o
+	ar rcs ./libs/socket_functions.a ./libs/socket_functions.o
+	cd ..
+	${CC} -Wall -Werror -I ./libs/ -I ./src/include -c ./src/main.c -o ./libs/main.o
+	${CC} -o ./bin/event_stream ./libs/main.o ./libs/socket_functions.a # ../libs/lib_mylib.a
 
 
 clean:
