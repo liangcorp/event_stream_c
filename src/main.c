@@ -3,12 +3,11 @@
 
 int main()
 {
-    int result = create_socket();
+	int result = create_socket();
 
-    if (result == 0)
-    {
-        printf("Hello World\n");
-    }
+	if (result == 0) {
+		printf("Hello World\n");
+	}
 
 	return 0;
 }
