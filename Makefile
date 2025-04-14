@@ -18,7 +18,6 @@ debug:
 	${CC} -fsanitize=address -Wall -Werror -g -I ./libs/ -I ./src/include -c ./src/main.c -o ./libs/main.o
 	${CC} -fsanitize=address -Wall -Werror -g -o ./bin/event_stream ./libs/main.o ./libs/socket_functions.a
 
-
 clean:
 	rm -rf ./libs
 	rm -rf ./bin

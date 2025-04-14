@@ -1,3 +1,3 @@
 #include <stdio.h>
 
-int create_socket(void);
+int socket_create(void);
