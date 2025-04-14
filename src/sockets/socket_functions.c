@@ -1,8 +1,4 @@
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-
-#include "result_handler.h"
+#include "socket_functions.h"
 
 struct Result socket_create(void)
 {
