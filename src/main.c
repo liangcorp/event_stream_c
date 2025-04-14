@@ -1,14 +1,16 @@
 #include "main.h"
 #include "result_handler.h"
-#include "sockets/socket_functions.c"
+#include "socket_functions.h"
 
 int main()
 {
-	int result = socket_create();
+	struct Result socket_result = socket_create();
 
-	if (result == 0) {
-		printf("Hello World\n");
-	}
+	if (socket_result.result_enum == Error) {
+		printf("Something wrong\n");
+	} else {
+        printf("created socket\n");
+    }
 
 	return 0;
 }
