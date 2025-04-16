@@ -1,3 +1,9 @@
+#include <string.h>
+
+#define MAX_ERROR_SIZE 250
+
+#pragma once
+
 struct Result {
     enum ResultEnum {
         Ok,
@@ -12,4 +18,6 @@ struct Result {
 
         void *data_ptr;
     } option_type;
+
+    char error_message[MAX_ERROR_SIZE];
 };
