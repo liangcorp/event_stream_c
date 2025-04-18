@@ -7,14 +7,13 @@
 int main()
 {
 
-    short socket_desc = 1;
-    unsigned int port_number = 123456;
+    short h_socket = 0;
+    unsigned int port_number = 12345;
 
-    ResultType socket_result = socket_create();
+    ResultValue socket_result = socket_create(&h_socket);
 
 	if (socket_result.result_enum == Ok) {
         printf("created socket\n");
-        socket_desc = *(short *)socket_result.data_ptr;
 	} else if (socket_result.result_enum == Error) {
         printf("%s\n",socket_result.error_message);
         abort();
@@ -22,10 +21,10 @@ int main()
         printf("Failed to extract result enum at %s:%d", __FILE__, __LINE__);
     }
 
-    ResultType bind_result = bind_created_socket(socket_desc, port_number);
+    ResultValue bind_result = bind_created_socket(h_socket, port_number);
 
 	if (bind_result.result_enum == Ok) {
-        printf("socket binded successfully\n");
+        printf("socket bind successfully\n");
 	} else if (bind_result.result_enum == Error) {
         printf("%s\n", bind_result.error_message);
         abort();
@@ -33,6 +32,5 @@ int main()
         printf("Failed to extract result enum at %s:%d", __FILE__, __LINE__);
     }
 
-    // close(socket_desc);
 	return 0;
 }
