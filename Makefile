@@ -23,6 +23,10 @@ debug:
 	${CC} -fsanitize=address -Wall -Werror -Wpedantic -g -I ./libs/ -I ./src/include -c ./src/main.c -o ./libs/main.o
 	${CC} -fsanitize=address -Wall -Werror -Wpedantic -g -o ./bin/event_stream ./libs/main.o ./libs/socket_functions.a ./libs/thread_functions.a
 
+format:
+	find -name *.h -exec clang-format -i {} \;
+	find -name *.c -exec clang-format -i {} \;
+
 clean:
 	rm -rf ./libs
 	rm -rf ./bin

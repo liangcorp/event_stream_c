@@ -5,9 +5,9 @@
 #include "result_data_type.h"
 
 struct SocketThreadVariables {
-    int sock;
-    char *message;
-    unsigned int message_length;
+	int sock;
+	char *message;
+	unsigned int message_length;
 };
 
 ResultType socket_create(short *h_socket_ptr);

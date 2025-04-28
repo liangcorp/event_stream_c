@@ -7,7 +7,7 @@
 ResultType socket_create(short *socket_desc)
 {
 	ResultType socket_result;
-    memset(socket_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
+	memset(socket_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
 	*socket_desc = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -25,8 +25,8 @@ ResultType socket_create(short *socket_desc)
 
 ResultType bind_created_socket(short socket_desc, unsigned int port_number)
 {
-    ResultType socket_bind_result;
-    memset(socket_bind_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
+	ResultType socket_bind_result;
+	memset(socket_bind_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
 	struct sockaddr_in remote = { 0 };
 
@@ -37,14 +37,15 @@ ResultType bind_created_socket(short socket_desc, unsigned int port_number)
 	remote.sin_addr.s_addr = htonl(INADDR_ANY);
 	remote.sin_port = htons(port_number); /*local port */
 
-    if (bind(socket_desc, (struct sockaddr *)&remote, sizeof(remote)) == -1) {
+	if (bind(socket_desc, (struct sockaddr *)&remote, sizeof(remote)) ==
+	    -1) {
 		socket_bind_result.result_enum = Error;
 		sprintf(socket_bind_result.error_message,
 			"ERROR: Failed to bind socket at %s:%d", __FILE__,
 			__LINE__);
-    } else {
+	} else {
 		socket_bind_result.result_enum = Ok;
-    }
+	}
 
 	return socket_bind_result;
 }

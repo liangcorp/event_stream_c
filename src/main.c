@@ -87,7 +87,7 @@ int main(void)
 		socket_thread_variables.message = "Hello";
 		socket_thread_variables.message_length = strlen(message);
 
-        printf("Creating worker thread\n");
+		printf("Creating worker thread\n");
 		pthread_create(&thread, NULL, hello_fun,
 			       (void *)&socket_thread_variables);
 	};
