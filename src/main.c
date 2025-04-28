@@ -84,22 +84,18 @@ int main(void)
 		struct SocketThreadVariables socket_thread_variables;
 
 		socket_thread_variables.sock = sock;
-		socket_thread_variables.message = message;
+		socket_thread_variables.message = "Hello";
 		socket_thread_variables.message_length = strlen(message);
 
+        printf("Creating worker thread\n");
 		pthread_create(&thread, NULL, hello_fun,
 			       (void *)&socket_thread_variables);
 	};
-	// /* send some data */
-	// if (send(sock, message, strlen(message), 0) < 0) {
-	// 	perror("Send failed");
-	// 	return 1;
-	// }
 
 	close(sock);
-	sleep(1);
 
 	pthread_join(thread, NULL);
 	pthread_exit(NULL);
+
 	return 0;
 }
