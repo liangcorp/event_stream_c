@@ -1,3 +1,3 @@
 # Event Stream
 
-Kafka written in C.
+Event stream written in C.

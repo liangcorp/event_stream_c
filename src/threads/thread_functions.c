@@ -4,16 +4,20 @@
 
 #include "socket_functions.h"
 
-void *hello_fun(void *thread_arg)
+void *hello_fun(void *socket)
 {
-	struct SocketThreadVariables *socket_thread_data;
+	char message[MAX_CLIENT_MESSAGE];
 
-	socket_thread_data = (struct SocketThreadVariables *)thread_arg;
+	/* Receiving a reply from the client */
+	if (recv(*(int *)socket, message, MAX_CLIENT_MESSAGE, 0) < 0) {
+		perror("ERROR: recv failed");
+		exit(1);
+	}
 
-	printf("Sending reply\n");
+	printf("Incoming message: %s\n", message);
+
 	/* send some data */
-	if (send(socket_thread_data->sock, socket_thread_data->message,
-		 socket_thread_data->message_length, 0) < 0) {
+	if (send(*(int *)socket, "Hello back", MAX_CLIENT_MESSAGE, 0) < 0) {
 		perror("Send failed");
 		abort();
 	}

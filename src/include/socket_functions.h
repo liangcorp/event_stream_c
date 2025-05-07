@@ -4,6 +4,11 @@
 
 #include "result_data_type.h"
 
+/* Max number connections allowed in queue */
+#define MAX_CONNECTION_IN_QUEUE 10
+#define MAX_REPLY_MESSAGE 250
+#define MAX_CLIENT_MESSAGE 250
+
 struct SocketThreadVariables {
 	int sock;
 	char *message;
