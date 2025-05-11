@@ -1,6 +1,6 @@
-#define MAX_ERROR_MESSAGE_SIZE 250
-
 #pragma once
+
+#define MAX_ERROR_MESSAGE_SIZE 250
 
 enum ResultEnum {
 	Ok,

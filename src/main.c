@@ -7,16 +7,18 @@
 #include "socket_functions.h"
 #include "thread_functions.h"
 
+#define PORT_NUMBER 12345
+
+/* Max number connections allowed in queue */
+#define MAX_CONNECTION_IN_QUEUE 10
+
 int main(void)
 {
 	/* socket variables */
 	short socket_desc = 0;
-	unsigned int port_number = 12345;
 
 	int sock = 0;
 	int client_len = 0;
-	char client_message[MAX_CLIENT_MESSAGE] = { 0 };
-	char message[MAX_REPLY_MESSAGE] = { 0 };
 
 	struct sockaddr_in client;
 
@@ -24,42 +26,46 @@ int main(void)
 	pthread_t thread = 0;
 
 	/* Create socket */
-	ResultType socket_result = socket_create(&socket_desc);
+	ResultType socket_create_result = socket_create(&socket_desc);
 
-	switch (socket_result.result_enum) {
+	switch (socket_create_result.result_enum) {
 	case Ok:
-		printf("created socket\n");
+		printf("socket created successfully\n");
 		break;
 	case Error:
-		fprintf(stderr, "%s\n", socket_result.error_message);
-		abort();
+		fprintf(stderr, "%s\n", socket_create_result.error_message);
+		return 1;
 		break;
 	default:
-		fprintf(stderr, "Failed to extract result enum at %s:%d",
+		fprintf(stderr,
+			"Failed to extract socket create result enum at %s:%d",
 			__FILE__, __LINE__);
 		break;
 	}
 
 	/* Bind socket */
-	ResultType bind_result = bind_created_socket(socket_desc, port_number);
+	ResultType socket_bind_result =
+		bind_created_socket(socket_desc, PORT_NUMBER);
 
-	switch (bind_result.result_enum) {
+	switch (socket_bind_result.result_enum) {
 	case Ok:
 		printf("socket bind successfully\n");
 		break;
 	case Error:
-		fprintf(stderr, "%s\n", bind_result.error_message);
-		abort();
+		fprintf(stderr, "%s\n", socket_bind_result.error_message);
+		return 1;
 		break;
 	default:
-		fprintf(stderr, "Failed to extract result enum at %s:%d",
+		fprintf(stderr,
+			"Failed to extract socket bind result enum at %s:%d",
 			__FILE__, __LINE__);
 		break;
 	}
 
 	if (listen(socket_desc, MAX_CONNECTION_IN_QUEUE) != 0) {
-		fprintf(stderr, "Fail to listen on socket %d at %s:%d",
-			socket_desc, __FILE__, __LINE__);
+		int errsv = errno;
+		fprintf(stderr, "SOCKET LISTEN ERROR <%s:%d>: %s", __FILE__,
+			__LINE__, strerror(errsv));
 	}
 
 	/* Accepting incoming connections */
@@ -77,8 +83,6 @@ int main(void)
 		}
 
 		printf("Connection accepted\n");
-		memset(client_message, '\0', sizeof(client_message));
-		memset(message, '\0', sizeof(message));
 
 		printf("Creating worker thread\n");
 		pthread_create(&thread, NULL, hello_fun, (void *)&sock);

@@ -6,21 +6,23 @@
 
 ResultType socket_create(short *socket_desc)
 {
-	ResultType socket_result;
-	memset(socket_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
+	ResultType socket_create_result;
+	memset(socket_create_result.error_message, '\0',
+	       MAX_ERROR_MESSAGE_SIZE);
 
 	*socket_desc = socket(AF_INET, SOCK_STREAM, 0);
 
 	if (*socket_desc == -1) {
-		socket_result.result_enum = Error;
-		sprintf(socket_result.error_message,
-			"ERROR: Failed to create socket at %s:%d", __FILE__,
-			__LINE__);
+		int errsv = errno;
+		socket_create_result.result_enum = Error;
+		sprintf(socket_create_result.error_message,
+			"SOCKET CREATE ERROR <%s:%d>: %s", __FILE__, __LINE__,
+			strerror(errsv));
 	} else {
-		socket_result.result_enum = Ok;
+		socket_create_result.result_enum = Ok;
 	}
 
-	return socket_result;
+	return socket_create_result;
 }
 
 ResultType bind_created_socket(short socket_desc, unsigned int port_number)
@@ -39,10 +41,11 @@ ResultType bind_created_socket(short socket_desc, unsigned int port_number)
 
 	if (bind(socket_desc, (struct sockaddr *)&remote, sizeof(remote)) ==
 	    -1) {
+		int errsv = errno;
 		socket_bind_result.result_enum = Error;
 		sprintf(socket_bind_result.error_message,
-			"ERROR: Failed to bind socket at %s:%d", __FILE__,
-			__LINE__);
+			"SOCKET BIND ERROR <%s:%d>: %s", __FILE__, __LINE__,
+			strerror(errsv));
 	} else {
 		socket_bind_result.result_enum = Ok;
 	}

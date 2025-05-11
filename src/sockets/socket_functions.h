@@ -1,13 +1,11 @@
+#pragma once
+
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "result_data_type.h"
-
-/* Max number connections allowed in queue */
-#define MAX_CONNECTION_IN_QUEUE 10
-#define MAX_REPLY_MESSAGE 250
-#define MAX_CLIENT_MESSAGE 250
 
 struct SocketThreadVariables {
 	int sock;
