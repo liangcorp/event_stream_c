@@ -3,15 +3,28 @@
 #include <string.h>
 #include <sys/socket.h>
 
+#include "result_data_type.h"
 #include "socket_functions.h"
 #include "thread_functions.h"
 
 #define MAX_MESSAGE_SIZE 250
 
+ResultType worker_thread_get(void *socket)
+{
+	ResultType work_thread_get_result;
+	memset(work_thread_get_result.error_message, '\0',
+	       MAX_ERROR_MESSAGE_SIZE);
+
+    /* pthread variables */
+    pthread_t thread = 0;
+}
+
 void *hello_fun(void *socket)
 {
 	char incoming_message[MAX_MESSAGE_SIZE];
     memset(incoming_message, '\0', sizeof(incoming_message));
+
+    const unsigned int MAX_THREAD_NUMBER = sysconf(_SC_NPROCESSORS_ONLN) + 1;
 
 	/* Receiving a reply from the client */
 	if (recv(*(int *)socket, incoming_message, MAX_MESSAGE_SIZE, 0) < 0) {

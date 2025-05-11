@@ -20,10 +20,11 @@ int main(void)
 	int sock = 0;
 	int client_len = 0;
 
+    /* pthread variables */
+    pthread_t thread = 0;
+
 	struct sockaddr_in client;
 
-	/* pthread variables */
-	pthread_t thread = 0;
 
 	/* Create socket */
 	ResultType socket_create_result = socket_create(&socket_desc);
@@ -85,6 +86,7 @@ int main(void)
 		printf("Connection accepted\n");
 
 		printf("Creating worker thread\n");
+
 		pthread_create(&thread, NULL, hello_fun, (void *)&sock);
 	};
 
