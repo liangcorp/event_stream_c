@@ -4,9 +4,9 @@
 #include "socket_functions.h"
 #include "result_data_type.h"
 
-ResultType socket_create(short *socket_desc)
+Result_t socket_create(short *socket_desc)
 {
-	ResultType socket_create_result;
+	Result_t socket_create_result;
 	memset(socket_create_result.error_message, '\0',
 	       MAX_ERROR_MESSAGE_SIZE);
 
@@ -15,7 +15,7 @@ ResultType socket_create(short *socket_desc)
 	if (*socket_desc == -1) {
 		int errsv = errno;
 		socket_create_result.result_enum = Error;
-		sprintf(socket_create_result.error_message,
+		snprintf(socket_create_result.error_message, MAX_ERROR_MESSAGE_SIZE,
 			"SOCKET CREATE ERROR <%s:%d>: %s", __FILE__, __LINE__,
 			strerror(errsv));
 	} else {
@@ -25,9 +25,9 @@ ResultType socket_create(short *socket_desc)
 	return socket_create_result;
 }
 
-ResultType bind_created_socket(short socket_desc, unsigned int port_number)
+Result_t bind_created_socket(short socket_desc, unsigned int port_number)
 {
-	ResultType socket_bind_result;
+	Result_t socket_bind_result;
 	memset(socket_bind_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
 	struct sockaddr_in remote = { 0 };
@@ -43,7 +43,7 @@ ResultType bind_created_socket(short socket_desc, unsigned int port_number)
 	    -1) {
 		int errsv = errno;
 		socket_bind_result.result_enum = Error;
-		sprintf(socket_bind_result.error_message,
+		snprintf(socket_bind_result.error_message, MAX_ERROR_MESSAGE_SIZE,
 			"SOCKET BIND ERROR <%s:%d>: %s", __FILE__, __LINE__,
 			strerror(errsv));
 	} else {

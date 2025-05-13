@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 
 #include "result_data_type.h"
 #include "socket_functions.h"
@@ -86,13 +87,8 @@ int main(void)
 
 		printf("Creating worker thread pool\n");
 
-        SocketThreadPool_t st_pool = socket_thread_pool_create();
-
-        for (int i = 0; i < st_pool.no_of_threads; i++) {
-            printf("thread number %d with value %lu\n", i, st_pool.st_worker[i].thread_value);
-        }
-
-        get_worker_thread(&st_pool, (void *)&sock);
+        socket_thread_pool_create();
+		pthread_create(&thread, NULL, hello_fun, (void *)&sock);
 	};
 
 	pthread_join(thread, NULL);

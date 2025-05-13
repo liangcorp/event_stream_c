@@ -13,5 +13,5 @@ struct SocketThreadVariables {
 	unsigned int message_length;
 };
 
-ResultType socket_create(short *h_socket_ptr);
-ResultType bind_created_socket(short h_socket, unsigned int port_number);
+Result_t socket_create(short *h_socket_ptr);
+Result_t bind_created_socket(short h_socket, unsigned int port_number);
