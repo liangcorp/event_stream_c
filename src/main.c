@@ -92,7 +92,21 @@ int main(void)
             printf("thread number %d with value %lu\n", i, st_pool.st_worker[i].thread_value);
         }
 
-        get_worker_thread(&st_pool, (void *)&sock);
+        Result_t get_worker_thread_result = get_worker_thread(&st_pool, (void *)&sock);
+        switch (get_worker_thread_result.result_enum) {
+        case Ok:
+            printf("thread worker created successfully\n");
+            break;
+        case Error:
+            fprintf(stderr, "%s\n", get_worker_thread_result.error_message);
+            return 1;
+            break;
+        default:
+            fprintf(stderr,
+                "Failed to extract get socket thread worker result enum at %s:%d",
+                __FILE__, __LINE__);
+            break;
+        }
 	};
 
 	pthread_join(thread, NULL);

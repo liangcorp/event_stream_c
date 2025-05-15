@@ -15,7 +15,7 @@ void *hello_fun(void *socket)
     memset(incoming_message, '\0', sizeof(incoming_message));
 
 
-	/* Receiving a reply from the client */
+	/* Receiving a message from the client */
 	if (recv(*(int *)socket, incoming_message, MAX_MESSAGE_SIZE, 0) < 0) {
 		int errsv = errno;
 		fprintf(stderr, "SOCKET recv ERROR <%s:%d>: %s\n", __FILE__, __LINE__, strerror(errsv));
@@ -76,6 +76,5 @@ Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket)
         "GET WORKER THREAD ERROR <%s:%d>: %s", __FILE__, __LINE__,
         "thread pool is full");
     return get_work_thread_result;
-
 }
 
