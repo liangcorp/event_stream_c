@@ -68,6 +68,9 @@ int main(void)
 			__LINE__, strerror(errsv));
 	}
 
+    printf("Creating worker thread pool\n");
+    SocketThreadPool_t st_pool = socket_thread_pool_create();
+
 	/* Accepting incoming connections */
 	while (1) {
 		printf("Waiting for incoming connections...\n");
@@ -84,10 +87,6 @@ int main(void)
 
 		printf("Connection accepted\n");
 
-		printf("Creating worker thread pool\n");
-
-        SocketThreadPool_t st_pool = socket_thread_pool_create();
-
         for (int i = 0; i < st_pool.no_of_threads; i++) {
             printf("thread number %d with value %lu\n", i, st_pool.st_worker[i].thread_value);
         }
@@ -95,7 +94,7 @@ int main(void)
         Result_t get_worker_thread_result = get_worker_thread(&st_pool, (void *)&sock);
         switch (get_worker_thread_result.result_enum) {
         case Ok:
-            printf("thread worker created successfully\n");
+            printf("get thread worker successfully\n");
             break;
         case Error:
             fprintf(stderr, "%s\n", get_worker_thread_result.error_message);

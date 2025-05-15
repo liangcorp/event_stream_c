@@ -14,7 +14,6 @@ void *hello_fun(void *socket)
 	char incoming_message[MAX_MESSAGE_SIZE];
     memset(incoming_message, '\0', sizeof(incoming_message));
 
-
 	/* Receiving a message from the client */
 	if (recv(*(int *)socket, incoming_message, MAX_MESSAGE_SIZE, 0) < 0) {
 		int errsv = errno;
@@ -65,7 +64,7 @@ Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket)
 
     for (int i = 0; i < st_pool->no_of_threads; i++) {
         if (st_pool->st_worker[i].thread_value == 0) {
-            pthread_create(&st_pool->st_worker[i].thread_value, NULL, hello_fun, (void *)&socket);
+            pthread_create(&(st_pool->st_worker[i].thread_value), NULL, hello_fun, socket);
             get_work_thread_result.result_enum = Ok;
             return get_work_thread_result;
         }
