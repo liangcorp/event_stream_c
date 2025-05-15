@@ -24,7 +24,7 @@ void *hello_fun(void *socket)
 	printf("Incoming message: %s\n", incoming_message);
 
     char outgoing_message[MAX_MESSAGE_SIZE] = { '\0' };
-    strncpy(outgoing_message, "Hello back", MAX_MESSAGE_SIZE);
+    snprintf(outgoing_message, MAX_MESSAGE_SIZE, "Hello %d", *(int *)socket);
 
 	/* send some data */
 	if (send(*(int *)socket, outgoing_message, MAX_MESSAGE_SIZE, 0) < 0) {
