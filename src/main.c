@@ -113,7 +113,7 @@ int main(void)
 
     pthread_join(thread, NULL);
     pthread_exit(NULL);
-    close(sock);
+    // close(sock);
 
     return 0;
 }

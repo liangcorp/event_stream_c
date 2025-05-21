@@ -9,13 +9,18 @@
 
 #define MAX_MESSAGE_SIZE 250
 
-void *hello_fun(void *socket)
+void *hello_fun(void *thread_worker_var)
 {
+    ThreadWorkerVariable_t thread_variable = *(ThreadWorkerVariable_t *)thread_worker_var;
+
+    printf("DEBUG %d\n", thread_variable.socket);
+    int thread_pool_index = thread_variable.thread_pool_index;
+
     char incoming_message[MAX_MESSAGE_SIZE];
     memset(incoming_message, '\0', sizeof(incoming_message));
 
     /* Receiving a message from the client */
-    if (recv(*(int *)socket, incoming_message, MAX_MESSAGE_SIZE, 0) < 0)
+    if (recv(thread_variable.socket, incoming_message, MAX_MESSAGE_SIZE, 0) < 0)
     {
         int errsv = errno;
         fprintf(stderr, "SOCKET recv ERROR <%s:%d>: %s\n", __FILE__, __LINE__,
@@ -26,10 +31,10 @@ void *hello_fun(void *socket)
     printf("Incoming message: %s\n", incoming_message);
 
     char outgoing_message[MAX_MESSAGE_SIZE] = {'\0'};
-    snprintf(outgoing_message, MAX_MESSAGE_SIZE, "Hello %d", *(int *)socket);
+    snprintf(outgoing_message, MAX_MESSAGE_SIZE, "Hello %d", thread_variable.socket);
 
     /* send some data */
-    if (send(*(int *)socket, outgoing_message, MAX_MESSAGE_SIZE, 0) < 0)
+    if (send(thread_variable.socket, outgoing_message, MAX_MESSAGE_SIZE, 0) < 0)
     {
         int errsv = errno;
         fprintf(stderr, "SOCKET send ERROR <%s:%d>: %s", __FILE__, __LINE__,
@@ -37,6 +42,9 @@ void *hello_fun(void *socket)
         exit(1);
     }
     printf("sent hello back\n");
+
+    printf("free up thread %d\n", thread_pool_index);
+    close(thread_variable.socket);
 
     return 0;
 }
@@ -63,6 +71,10 @@ SocketThreadPool_t socket_thread_pool_create(void)
 /* return an existing or create and return a new pthread */
 Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket)
 {
+    ThreadWorkerVariable_t thread_worker_var;
+
+    thread_worker_var.socket = *(int *)socket;
+
     Result_t get_work_thread_result;
     memset(get_work_thread_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
@@ -70,8 +82,9 @@ Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket)
     {
         if (st_pool->st_worker[i].thread_value == 0)
         {
+            thread_worker_var.thread_pool_index = i;
             pthread_create(&(st_pool->st_worker[i].thread_value), NULL, hello_fun,
-                           socket);
+                           &thread_worker_var);
             get_work_thread_result.result_enum = Ok;
             return get_work_thread_result;
         }
