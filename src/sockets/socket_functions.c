@@ -15,8 +15,8 @@ Result_t socket_create(short *socket_desc)
     {
         int errsv = errno;
         socket_create_result.result_enum = Error;
-        snprintf(socket_create_result.error_message, MAX_ERROR_MESSAGE_SIZE,
-                 "SOCKET CREATE ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
+        snprintf(socket_create_result.error_message, MAX_ERROR_MESSAGE_SIZE, "SOCKET CREATE ERROR <%s:%d>: %s",
+                 __FILE__, __LINE__, strerror(errsv));
     }
     else
     {
@@ -44,8 +44,8 @@ Result_t bind_created_socket(short socket_desc, unsigned int port_number)
     {
         int errsv = errno;
         socket_bind_result.result_enum = Error;
-        snprintf(socket_bind_result.error_message, MAX_ERROR_MESSAGE_SIZE,
-                 "SOCKET BIND ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
+        snprintf(socket_bind_result.error_message, MAX_ERROR_MESSAGE_SIZE, "SOCKET BIND ERROR <%s:%d>: %s", __FILE__,
+                 __LINE__, strerror(errsv));
     }
     else
     {
