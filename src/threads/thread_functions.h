@@ -21,4 +21,4 @@ typedef struct SocketThreadPool
 
 void *hello_fun(void *thread_worker_var);
 SocketThreadPool_t socket_thread_pool_create(void);
-Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket);
+Result_t get_worker_thread(SocketThreadWorker_t *st_worker, void *socket);

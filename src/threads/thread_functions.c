@@ -69,7 +69,7 @@ SocketThreadPool_t socket_thread_pool_create(void)
 }
 
 /* return an existing or create and return a new pthread */
-Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket)
+Result_t get_worker_thread(SocketThreadWorker_t *st_worker, void *socket)
 {
     ThreadWorkerVariable_t thread_worker_var;
 
@@ -78,17 +78,9 @@ Result_t get_worker_thread(SocketThreadPool_t *st_pool, void *socket)
     Result_t get_work_thread_result;
     memset(get_work_thread_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
-    for (int i = 0; i < st_pool->no_of_threads; i++)
-    {
-        if (st_pool->st_worker[i].thread_value == 0)
-        {
-            thread_worker_var.thread_pool_index = i;
-            pthread_create(&(st_pool->st_worker[i].thread_value), NULL, hello_fun,
-                           &thread_worker_var);
-            get_work_thread_result.result_enum = Ok;
-            return get_work_thread_result;
-        }
-    }
+    pthread_create(&(st_worker->thread_value), NULL, hello_fun, &thread_worker_var);
+    get_work_thread_result.result_enum = Ok;
+    return get_work_thread_result;
 
     get_work_thread_result.result_enum = Error;
     snprintf(get_work_thread_result.error_message, MAX_ERROR_MESSAGE_SIZE,
