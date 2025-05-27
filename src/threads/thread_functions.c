@@ -42,7 +42,7 @@ void *hello_fun(void *thread_worker_var)
     printf("sent hello back\n");
 
     printf("free up thread %d\n", thread_pool_index);
-    socket_thread_worker.thread_value = 0;
+    thread_variable.socket_thread_worker_ptr->thread_value = 0;
     close(thread_variable.socket);
 
     return 0;
@@ -78,7 +78,7 @@ Result_t get_worker_thread(SocketThreadWorker_t *socket_thread_worker_ptr, void 
     Result_t get_work_thread_result;
     memset(get_work_thread_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
-    pthread_create(&(socket_thread_worker->thread_value), NULL, hello_fun, &thread_worker_var);
+    pthread_create(&(socket_thread_worker_ptr->thread_value), NULL, hello_fun, &thread_worker_var);
     get_work_thread_result.result_enum = Ok;
     return get_work_thread_result;
 

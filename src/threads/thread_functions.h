@@ -12,7 +12,7 @@ typedef struct ThreadWorkerVariable
 {
     int socket;
     int thread_pool_index;
-    SocketThreadWorker *socket_thread_worker_ptr;
+    SocketThreadWorker_t *socket_thread_worker_ptr;
 } ThreadWorkerVariable_t;
 
 typedef struct SocketThreadPool
