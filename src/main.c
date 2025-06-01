@@ -65,8 +65,8 @@ int main(void)
         fprintf(stderr, "SOCKET LISTEN ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
     }
 
-    printf("Creating worker thread pool\n");
     SocketThreadPool_t socket_thread_pool = socket_thread_pool_create();
+    SocketClient_t client_socket;
 
     /* Accepting incoming connections */
     while (1)
@@ -77,6 +77,10 @@ int main(void)
         /* accept connection from an incoming client */
         socket_accept_connection =
             accept(socket_descriptor, (struct sockaddr *)&client, (socklen_t *)&socket_client_length);
+
+        client_socket.client_socket = socket_accept_connection;
+        client_socket.is_serviced = 0;
+        client_socket.next_client = NULL;
 
         if (socket_accept_connection < 0)
         {
