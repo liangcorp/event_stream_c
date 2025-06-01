@@ -1,5 +1,5 @@
+#include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "result_data_type.h"
@@ -86,27 +86,25 @@ int main(void)
 
         printf("Connection accepted\n");
 
+        // @TODO waiting queue for accepted connection
+        // @TODO checking if thread pool has free thread
         for (i = 0; i < socket_thread_pool.no_of_threads; i++)
         {
             printf("thread number %d with value %lu\n", i, socket_thread_pool.socket_thread_worker[i].thread_value);
+
             if (socket_thread_pool.socket_thread_worker[i].thread_value == 0)
             {
-                Result_t get_worker_thread_result =
-                    get_worker_thread(socket_thread_pool.socket_thread_worker + i, (void *)&socket_accept_connection);
-                switch (get_worker_thread_result.result_enum)
-                {
-                case Ok:
-                    printf("get thread worker successfully\n");
-                    break;
-                case Error:
-                    fprintf(stderr, "%s\n", get_worker_thread_result.error_message);
-                    return 1;
-                    break;
-                default:
-                    fprintf(stderr, "Failed to extract get socket thread worker result enum at %s:%d", __FILE__,
-                            __LINE__);
-                    break;
+                printf("create thread with socket number: %d\n", socket_accept_connection);
+
+                ThreadWorkerVariable_t thread_worker_var;
+                thread_worker_var.socket = socket_accept_connection;
+                thread_worker_var.socket_thread_worker_ptr = socket_thread_pool.socket_thread_worker + i;
+
+                if (pthread_create(&(thread_worker_var.socket_thread_worker_ptr->thread_value), NULL, hello_fun, &thread_worker_var) < 0) {
+                    int errsv = errno;
+                    fprintf(stderr, "PTHREAD CREATION ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
                 }
+
                 break;
             }
         }

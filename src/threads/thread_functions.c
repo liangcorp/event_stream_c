@@ -1,13 +1,15 @@
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/socket.h>
 
-#include "result_data_type.h"
-#include "socket_functions.h"
+#include <sys/socket.h>
+#include <unistd.h>
+
 #include "thread_functions.h"
 
 #define MAX_MESSAGE_SIZE 250
+#define MAX_THREAD_NUMBER 1
 
 void *hello_fun(void *thread_worker_var)
 {
@@ -51,7 +53,7 @@ void *hello_fun(void *thread_worker_var)
 /* create a pool of threads with value of 0 */
 SocketThreadPool_t socket_thread_pool_create(void)
 {
-    const unsigned int MAX_THREAD_NUMBER = sysconf(_SC_NPROCESSORS_ONLN) + 1;
+    // const unsigned int MAX_THREAD_NUMBER = sysconf(_SC_NPROCESSORS_ONLN) + 1;
 
     SocketThreadWorker_t socket_thread_worker[MAX_MESSAGE_SIZE];
 
@@ -67,23 +69,3 @@ SocketThreadPool_t socket_thread_pool_create(void)
     return st_pool;
 }
 
-/* return an existing or create and return a new pthread */
-Result_t get_worker_thread(SocketThreadWorker_t *socket_thread_worker_ptr, void *socket)
-{
-    ThreadWorkerVariable_t thread_worker_var;
-
-    thread_worker_var.socket = *(int *)socket;
-    thread_worker_var.socket_thread_worker_ptr = socket_thread_worker_ptr;
-
-    Result_t get_work_thread_result;
-    memset(get_work_thread_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
-
-    pthread_create(&(socket_thread_worker_ptr->thread_value), NULL, hello_fun, &thread_worker_var);
-    get_work_thread_result.result_enum = Ok;
-    return get_work_thread_result;
-
-    get_work_thread_result.result_enum = Error;
-    snprintf(get_work_thread_result.error_message, MAX_ERROR_MESSAGE_SIZE, "GET WORKER THREAD ERROR <%s:%d>: %s",
-             __FILE__, __LINE__, "thread pool is full");
-    return get_work_thread_result;
-}
