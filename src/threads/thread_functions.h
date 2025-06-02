@@ -2,7 +2,6 @@
 
 #include <pthread.h>
 
-
 typedef struct SocketThreadWorker
 {
     pthread_t thread_value;

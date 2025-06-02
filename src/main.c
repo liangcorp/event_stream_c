@@ -38,7 +38,8 @@ int main(void)
         return 1;
         break;
     default:
-        fprintf(stderr, "Failed to extract socket create result enum at %s:%d", __FILE__, __LINE__);
+        fprintf(stderr, "Failed to extract socket create result enum at %s:%d", __FILE__,
+                __LINE__);
         break;
     }
 
@@ -55,14 +56,16 @@ int main(void)
         return 1;
         break;
     default:
-        fprintf(stderr, "Failed to extract socket bind result enum at %s:%d", __FILE__, __LINE__);
+        fprintf(stderr, "Failed to extract socket bind result enum at %s:%d", __FILE__,
+                __LINE__);
         break;
     }
 
     if (listen(socket_descriptor, MAX_CONNECTION_IN_QUEUE) != 0)
     {
         int errsv = errno;
-        fprintf(stderr, "SOCKET LISTEN ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
+        fprintf(stderr, "SOCKET LISTEN ERROR <%s:%d>: %s", __FILE__, __LINE__,
+                strerror(errsv));
     }
 
     SocketThreadPool_t socket_thread_pool = socket_thread_pool_create();
@@ -75,8 +78,8 @@ int main(void)
         socket_client_length = sizeof(struct sockaddr_in);
 
         /* accept connection from an incoming client */
-        socket_accept_connection =
-            accept(socket_descriptor, (struct sockaddr *)&client, (socklen_t *)&socket_client_length);
+        socket_accept_connection = accept(socket_descriptor, (struct sockaddr *)&client,
+                                          (socklen_t *)&socket_client_length);
 
         client_socket.client_socket = socket_accept_connection;
         client_socket.is_serviced = 0;
@@ -94,19 +97,26 @@ int main(void)
         // @TODO checking if thread pool has free thread
         for (i = 0; i < socket_thread_pool.no_of_threads; i++)
         {
-            printf("thread number %d with value %lu\n", i, socket_thread_pool.socket_thread_worker[i].thread_value);
+            printf("thread number %d with value %lu\n", i,
+                   socket_thread_pool.socket_thread_worker[i].thread_value);
 
             if (socket_thread_pool.socket_thread_worker[i].thread_value == 0)
             {
-                printf("create thread with socket number: %d\n", socket_accept_connection);
+                printf("create thread with socket number: %d\n",
+                       socket_accept_connection);
 
                 ThreadWorkerVariable_t thread_worker_var;
                 thread_worker_var.socket = socket_accept_connection;
-                thread_worker_var.socket_thread_worker_ptr = socket_thread_pool.socket_thread_worker + i;
+                thread_worker_var.socket_thread_worker_ptr =
+                    socket_thread_pool.socket_thread_worker + i;
 
-                if (pthread_create(&(thread_worker_var.socket_thread_worker_ptr->thread_value), NULL, hello_fun, &thread_worker_var) < 0) {
+                if (pthread_create(
+                        &(thread_worker_var.socket_thread_worker_ptr->thread_value), NULL,
+                        hello_fun, &thread_worker_var) < 0)
+                {
                     int errsv = errno;
-                    fprintf(stderr, "PTHREAD CREATION ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
+                    fprintf(stderr, "PTHREAD CREATION ERROR <%s:%d>: %s", __FILE__,
+                            __LINE__, strerror(errsv));
                 }
 
                 break;

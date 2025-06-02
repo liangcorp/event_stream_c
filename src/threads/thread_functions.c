@@ -25,7 +25,8 @@ void *hello_fun(void *thread_worker_var)
     if (recv(thread_variable.socket, incoming_message, MAX_MESSAGE_SIZE, 0) < 0)
     {
         int errsv = errno;
-        fprintf(stderr, "SOCKET recv ERROR <%s:%d>: %s\n", __FILE__, __LINE__, strerror(errsv));
+        fprintf(stderr, "SOCKET recv ERROR <%s:%d>: %s\n", __FILE__, __LINE__,
+                strerror(errsv));
         exit(1);
     }
 
@@ -38,7 +39,8 @@ void *hello_fun(void *thread_worker_var)
     if (send(thread_variable.socket, outgoing_message, MAX_MESSAGE_SIZE, 0) < 0)
     {
         int errsv = errno;
-        fprintf(stderr, "SOCKET send ERROR <%s:%d>: %s", __FILE__, __LINE__, strerror(errsv));
+        fprintf(stderr, "SOCKET send ERROR <%s:%d>: %s", __FILE__, __LINE__,
+                strerror(errsv));
         exit(1);
     }
     printf("sent hello back\n");
@@ -68,4 +70,3 @@ SocketThreadPool_t socket_thread_pool_create(void)
 
     return st_pool;
 }
-

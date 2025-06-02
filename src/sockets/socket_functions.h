@@ -13,7 +13,6 @@ typedef struct SocketThreadVariables
     unsigned int message_length;
 } SocketThreadVariables_t;
 
-
 typedef struct SocketClient
 {
     int client_socket;
