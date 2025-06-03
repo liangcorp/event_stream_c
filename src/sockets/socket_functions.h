@@ -20,5 +20,5 @@ typedef struct SocketClient
     struct SocketClient *next_client;
 } SocketClient_t;
 
-Result_t socket_create(short *h_socket_ptr);
-Result_t bind_created_socket(short h_socket, unsigned int port_number);
+Result_t *socket_create(short *h_socket_ptr);
+Result_t *bind_created_socket(short h_socket, unsigned int port_number);

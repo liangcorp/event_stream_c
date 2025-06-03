@@ -26,15 +26,15 @@ int main(void)
     struct sockaddr_in client;
 
     /* Create socket */
-    Result_t socket_create_result = socket_create(&socket_descriptor);
+    Result_t *socket_create_result = socket_create(&socket_descriptor);
 
-    switch (socket_create_result.result_enum)
+    switch (socket_create_result->result_enum)
     {
-    case Ok:
+    case OK:
         printf("socket created successfully\n");
         break;
-    case Error:
-        fprintf(stderr, "%s\n", socket_create_result.error_message);
+    case ERROR:
+        fprintf(stderr, "%s\n", socket_create_result->error_message);
         return 1;
         break;
     default:
@@ -44,15 +44,15 @@ int main(void)
     }
 
     /* Bind socket */
-    Result_t socket_bind_result = bind_created_socket(socket_descriptor, PORT_NUMBER);
+    Result_t *socket_bind_result = bind_created_socket(socket_descriptor, PORT_NUMBER);
 
-    switch (socket_bind_result.result_enum)
+    switch (socket_bind_result->result_enum)
     {
-    case Ok:
+    case OK:
         printf("socket bind successfully\n");
         break;
-    case Error:
-        fprintf(stderr, "%s\n", socket_bind_result.error_message);
+    case ERROR:
+        fprintf(stderr, "%s\n", socket_bind_result->error_message);
         return 1;
         break;
     default:

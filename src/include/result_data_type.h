@@ -4,8 +4,8 @@
 
 enum ResultEnum
 {
-    Ok,
-    Error,
+    OK,
+    ERROR
 };
 
 typedef struct Result
