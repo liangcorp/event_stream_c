@@ -57,7 +57,7 @@ SocketThreadPool_t socket_thread_pool_create(void)
 {
     // const unsigned int MAX_THREAD_NUMBER = sysconf(_SC_NPROCESSORS_ONLN) + 1;
 
-    SocketThreadWorker_t socket_thread_worker[MAX_MESSAGE_SIZE];
+    static SocketThreadWorker_t socket_thread_worker[MAX_THREAD_NUMBER];
 
     for (int i = 0; i < MAX_THREAD_NUMBER; i++)
     {
