@@ -18,7 +18,7 @@ int main(void)
 
     int i;
     int socket_accept_connection;
-    int socket_client_length;
+    int client_socket_length;
 
     /* pthread variables */
     pthread_t thread = 0;
@@ -68,22 +68,32 @@ int main(void)
                 strerror(errsv));
     }
 
-    SocketThreadPool_t socket_thread_pool = socket_thread_pool_create();
     SocketClient_t client_socket;
+    SocketClientQueue_t client_socket_queue;
+    client_socket_queue.head_client_socket_ptr = &client_socket;
+    pthread_t client_socket_queue_thread = 0;
+    if (pthread_create(&client_socket_queue_thread, NULL, manage_client_socket_queue, &client_socket_queue) < 0)
+    {
+        int errsv = errno;
+        fprintf(stderr, "SOCKET CLIENT QUEUE PTHREAD CREATION ERROR <%s:%d>: %s", __FILE__,
+                __LINE__, strerror(errsv));
+    }
+
+    SocketThreadPool_t socket_thread_pool = socket_thread_pool_create();
 
     /* Accepting incoming connections */
     while (1)
     {
         printf("Waiting for incoming connections...\n");
-        socket_client_length = sizeof(struct sockaddr_in);
+        client_socket_length = sizeof(struct sockaddr_in);
 
         /* accept connection from an incoming client */
         socket_accept_connection = accept(socket_descriptor, (struct sockaddr *)&client,
-                                          (socklen_t *)&socket_client_length);
+                                          (socklen_t *)&client_socket_length);
 
         client_socket.client_socket = socket_accept_connection;
         client_socket.is_serviced = 0;
-        client_socket.next_client = NULL;
+        client_socket.next_client_ptr = NULL;
 
         if (socket_accept_connection < 0)
         {
@@ -98,9 +108,9 @@ int main(void)
         for (i = 0; i < socket_thread_pool.no_of_threads; i++)
         {
             printf("thread number %d with value %lu\n", i,
-                   socket_thread_pool.socket_thread_worker[i].thread_value);
+                   socket_thread_pool.socket_thread_worker_ptr[i].thread_value);
 
-            if (socket_thread_pool.socket_thread_worker[i].thread_value == 0)
+            if (socket_thread_pool.socket_thread_worker_ptr[i].thread_value == 0)
             {
                 printf("create thread with socket number: %d\n",
                        socket_accept_connection);
@@ -108,7 +118,7 @@ int main(void)
                 ThreadWorkerVariable_t thread_worker_var;
                 thread_worker_var.socket = socket_accept_connection;
                 thread_worker_var.socket_thread_worker_ptr =
-                    socket_thread_pool.socket_thread_worker + i;
+                    socket_thread_pool.socket_thread_worker_ptr + i;
 
                 if (pthread_create(
                         &(thread_worker_var.socket_thread_worker_ptr->thread_value), NULL,

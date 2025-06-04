@@ -65,7 +65,7 @@ SocketThreadPool_t socket_thread_pool_create(void)
     }
 
     SocketThreadPool_t st_pool;
-    st_pool.socket_thread_worker = socket_thread_worker;
+    st_pool.socket_thread_worker_ptr = socket_thread_worker;
     st_pool.no_of_threads = MAX_THREAD_NUMBER;
 
     return st_pool;

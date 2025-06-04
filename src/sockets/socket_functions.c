@@ -55,3 +55,12 @@ Result_t *bind_created_socket(short socket_desc, unsigned int port_number)
 
     return &socket_bind_result;
 }
+
+void *manage_client_socket_queue(void *client_socket_queue)
+{
+    while (1) {
+        sleep(1);
+        printf("managing socket client queue\n");
+    }
+    return 0;
+}

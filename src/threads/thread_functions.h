@@ -16,7 +16,7 @@ typedef struct ThreadWorkerVariable
 
 typedef struct SocketThreadPool
 {
-    SocketThreadWorker_t *socket_thread_worker;
+    SocketThreadWorker_t *socket_thread_worker_ptr;
     unsigned int no_of_threads;
 } SocketThreadPool_t;
 
