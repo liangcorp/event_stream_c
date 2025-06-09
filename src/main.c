@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <stdio.h>
+#include <malloc.h>
 #include <string.h>
 
 #include "result_data_type.h"
@@ -68,15 +69,19 @@ int main(void)
                 strerror(errsv));
     }
 
-    SocketClient_t client_socket;
+
     SocketClientQueue_t client_socket_queue;
-    client_socket_queue.head_client_socket_ptr = &client_socket;
+    client_socket_queue.head_client_socket_ptr = NULL;
+
     pthread_t client_socket_queue_thread = 0;
-    if (pthread_create(&client_socket_queue_thread, NULL, manage_client_socket_queue, &client_socket_queue) < 0)
+
+    // create thread to manage client socket queue
+    if (pthread_create(&client_socket_queue_thread, NULL, manage_client_socket_queue,
+                       &client_socket_queue) < 0)
     {
         int errsv = errno;
-        fprintf(stderr, "SOCKET CLIENT QUEUE PTHREAD CREATION ERROR <%s:%d>: %s", __FILE__,
-                __LINE__, strerror(errsv));
+        fprintf(stderr, "SOCKET CLIENT QUEUE PTHREAD CREATION ERROR <%s:%d>: %s",
+                __FILE__, __LINE__, strerror(errsv));
     }
 
     SocketThreadPool_t socket_thread_pool = socket_thread_pool_create();
@@ -91,9 +96,18 @@ int main(void)
         socket_accept_connection = accept(socket_descriptor, (struct sockaddr *)&client,
                                           (socklen_t *)&client_socket_length);
 
-        client_socket.client_socket = socket_accept_connection;
-        client_socket.is_serviced = 0;
-        client_socket.next_client_ptr = NULL;
+        SocketClient_t *client_socket_ptr = client_socket_queue.head_client_socket_ptr;
+
+        while (client_socket_ptr != NULL)
+        {
+            client_socket_ptr = client_socket_ptr->next_client_socket_ptr;
+        }
+
+        // @TODO free this memory
+        client_socket_ptr = calloc(1, sizeof(SocketClient_t));
+        client_socket_ptr->client_socket = socket_accept_connection;
+        client_socket_ptr->is_serviced = 0;
+        client_socket_ptr->next_client_socket_ptr = NULL;
 
         if (socket_accept_connection < 0)
         {

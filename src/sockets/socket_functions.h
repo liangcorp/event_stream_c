@@ -17,7 +17,7 @@ typedef struct SocketClient
 {
     int client_socket;
     _Bool is_serviced;
-    struct SocketClient *next_client_ptr;
+    struct SocketClient *next_client_socket_ptr;
 } SocketClient_t;
 
 typedef struct SocketClientQueue

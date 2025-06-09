@@ -56,11 +56,24 @@ Result_t *bind_created_socket(short socket_desc, unsigned int port_number)
     return &socket_bind_result;
 }
 
-void *manage_client_socket_queue(void *client_socket_queue)
+void *manage_client_socket_queue(void *cs_queue_ptr)
 {
-    while (1) {
-        sleep(1);
-        printf("managing socket client queue\n");
+    SocketClient_t *client_socket_ptr = NULL;
+    SocketClientQueue_t *client_socket_queue_ptr = (SocketClientQueue_t *)cs_queue_ptr;
+
+    while (1)
+    {
+        client_socket_ptr = client_socket_queue_ptr->head_client_socket_ptr;
+        if (client_socket_ptr == NULL)
+        {
+            sleep(1);
+            printf("socket client queue clean\n");
+        }
+        else
+        {
+            printf("reached socket %p", (void *)client_socket_ptr);
+            client_socket_ptr = client_socket_ptr->next_client_socket_ptr;
+        }
     }
     return 0;
 }
