@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <malloc.h>
 
 #include "result_data_type.h"
 #include "socket_functions.h"
@@ -56,24 +57,44 @@ Result_t *bind_created_socket(short socket_desc, unsigned int port_number)
     return &socket_bind_result;
 }
 
-void *manage_client_socket_queue(void *cs_queue_ptr)
+// @TODO fix this
+void *client_socket_queue_manage(void *client_socket_queue_void_ptr)
 {
-    SocketClient_t *client_socket_ptr = NULL;
-    SocketClientQueue_t *client_socket_queue_ptr = (SocketClientQueue_t *)cs_queue_ptr;
+    SocketClient_t *head_client_socket_ptr = NULL;
+    SocketClientQueue_t *client_socket_queue_ptr = (SocketClientQueue_t *)client_socket_queue_void_ptr;
 
     while (1)
     {
-        client_socket_ptr = client_socket_queue_ptr->head_client_socket_ptr;
-        if (client_socket_ptr == NULL)
+        head_client_socket_ptr = client_socket_queue_ptr->head_client_socket_ptr;
+
+        while (1)
         {
-            sleep(1);
-            printf("socket client queue clean\n");
-        }
-        else
-        {
-            printf("reached socket %p", (void *)client_socket_ptr);
-            client_socket_ptr = client_socket_ptr->next_client_socket_ptr;
+            if (head_client_socket_ptr == NULL )
+            {
+                printf("client socket queue is empty\n");
+                sleep(1);
+            }
+            else
+            {
+                printf("first in queue socket number: %d\n", head_client_socket_ptr->client_socket);
+                client_socket_queue_ptr->head_client_socket_ptr = head_client_socket_ptr->next_client_socket_ptr;
+                free(head_client_socket_ptr);
+            }
         }
     }
     return 0;
+}
+
+void client_socket_queue_add(SocketClientQueue_t *client_socket_queue_ptr, SocketClient_t *client_socket_ptr)
+{
+    SocketClient_t *head_client_socket_ptr = NULL;
+
+    head_client_socket_ptr = client_socket_queue_ptr->head_client_socket_ptr;
+
+    while (head_client_socket_ptr != NULL)
+    {
+        head_client_socket_ptr = head_client_socket_ptr->next_client_socket_ptr;
+    }
+    head_client_socket_ptr = client_socket_ptr;
+    printf("add socket: %d to queue\n", client_socket_ptr->client_socket);
 }

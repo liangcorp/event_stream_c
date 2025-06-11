@@ -28,4 +28,5 @@ typedef struct SocketClientQueue
 
 Result_t *socket_create(short *h_socket_ptr);
 Result_t *bind_created_socket(short h_socket, unsigned int port_number);
-void *manage_client_socket_queue(void *socket_queue);
+void *client_socket_queue_manage(void *socket_queue);
+void client_socket_queue_add(SocketClientQueue_t *client_socket_queue_ptr, SocketClient_t *client_socket_ptr);

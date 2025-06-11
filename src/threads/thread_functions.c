@@ -12,9 +12,9 @@
 #define MAX_MESSAGE_SIZE 500
 #define MAX_THREAD_NUMBER 1
 
-void *hello_fun(void *thread_worker_var)
+void *hello_fun(void *thread_worker_void_ptr)
 {
-    ThreadWorkerVariable_t thread_variable = *(ThreadWorkerVariable_t *)thread_worker_var;
+    ThreadWorkerVariable_t thread_variable = *(ThreadWorkerVariable_t *)thread_worker_void_ptr;
 
     printf("DEBUG %d\n", thread_variable.socket);
     int thread_pool_index = thread_variable.thread_pool_index;
