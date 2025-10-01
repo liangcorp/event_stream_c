@@ -5,7 +5,7 @@
 
 #include "result_data_type.h"
 #include "socket_functions.h"
-#include "thread_functions.h"
+#include "socket_thread_functions.h"
 
 #define PORT_NUMBER 12345
 
@@ -85,7 +85,7 @@ int main(void)
                 __FILE__, __LINE__, strerror(errsv));
     }
 
-    ThreadPool_t socket_thread_pool = thread_pool_create();
+    SocketThreadPool_t socket_thread_pool = thread_pool_create();
 
     /* Accepting incoming connections */
     while (1)
@@ -126,7 +126,7 @@ int main(void)
                 printf("create thread with socket number: %d\n",
                        socket_accept_connection);
 
-                ThreadWorkerVariable_t thread_worker_var;
+                SocketThreadWorkerVariable_t thread_worker_var;
                 thread_worker_var.socket = socket_accept_connection;
                 thread_worker_var.socket_thread_worker_ptr =
                     socket_thread_pool.socket_thread_worker_ptr + i;

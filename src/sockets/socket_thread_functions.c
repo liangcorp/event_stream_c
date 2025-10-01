@@ -7,14 +7,14 @@
 #include <unistd.h>
 
 #include "http_messages.h"
-#include "thread_functions.h"
+#include "socket_thread_functions.h"
 
 #define MAX_MESSAGE_SIZE 500
 #define MAX_THREAD_NUMBER 1
 
 void *hello_fun(void *thread_worker_void_ptr)
 {
-    ThreadWorkerVariable_t thread_variable = *(ThreadWorkerVariable_t *)thread_worker_void_ptr;
+    SocketThreadWorkerVariable_t thread_variable = *(SocketThreadWorkerVariable_t *)thread_worker_void_ptr;
 
     printf("DEBUG %d\n", thread_variable.socket);
     int thread_pool_index = thread_variable.thread_pool_index;
@@ -54,18 +54,18 @@ void *hello_fun(void *thread_worker_void_ptr)
 }
 
 /* create a pool of threads with value of 0 */
-ThreadPool_t thread_pool_create(void)
+SocketThreadPool_t thread_pool_create(void)
 {
     // const unsigned int MAX_THREAD_NUMBER = sysconf(_SC_NPROCESSORS_ONLN) + 1;
 
-    static ThreadWorker_t socket_thread_worker[MAX_THREAD_NUMBER];
+    static SocketThreadWorker_t socket_thread_worker[MAX_THREAD_NUMBER];
 
     for (int i = 0; i < MAX_THREAD_NUMBER; i++)
     {
         socket_thread_worker[i].thread_value = 0;
     }
 
-    ThreadPool_t st_pool;
+    SocketThreadPool_t st_pool;
     st_pool.socket_thread_worker_ptr = socket_thread_worker;
     st_pool.no_of_threads = MAX_THREAD_NUMBER;
 
