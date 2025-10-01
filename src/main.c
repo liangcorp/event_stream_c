@@ -85,7 +85,7 @@ int main(void)
                 __FILE__, __LINE__, strerror(errsv));
     }
 
-    SocketThreadPool_t socket_thread_pool = socket_thread_pool_create();
+    ThreadPool_t socket_thread_pool = thread_pool_create();
 
     /* Accepting incoming connections */
     while (1)
