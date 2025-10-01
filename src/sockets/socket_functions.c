@@ -6,9 +6,9 @@
 #include "result_data_type.h"
 #include "socket_functions.h"
 
-Result_t *socket_create(short *socket_desc)
+ResultType *socket_create(short *socket_desc)
 {
-    static Result_t socket_create_result;
+    static ResultType socket_create_result;
     memset(socket_create_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
     *socket_desc = socket(AF_INET, SOCK_STREAM, 0);
@@ -28,9 +28,9 @@ Result_t *socket_create(short *socket_desc)
     return &socket_create_result;
 }
 
-Result_t *bind_created_socket(short socket_desc, unsigned int port_number)
+ResultType *bind_created_socket(short socket_desc, unsigned int port_number)
 {
-    static Result_t socket_bind_result;
+    static ResultType socket_bind_result;
     memset(socket_bind_result.error_message, '\0', MAX_ERROR_MESSAGE_SIZE);
 
     struct sockaddr_in remote = {0};
@@ -60,8 +60,8 @@ Result_t *bind_created_socket(short socket_desc, unsigned int port_number)
 // @TODO fix this
 void *client_socket_queue_manage(void *client_socket_queue_void_ptr)
 {
-    SocketClient_t *head_client_socket_ptr = NULL;
-    SocketClientQueue_t *client_socket_queue_ptr = (SocketClientQueue_t *)client_socket_queue_void_ptr;
+    SocketClientType *head_client_socket_ptr = NULL;
+    SocketClientQueueType *client_socket_queue_ptr = (SocketClientQueueType *)client_socket_queue_void_ptr;
 
     while (1)
     {
@@ -85,9 +85,9 @@ void *client_socket_queue_manage(void *client_socket_queue_void_ptr)
     return 0;
 }
 
-void client_socket_queue_add(SocketClientQueue_t *client_socket_queue_ptr, SocketClient_t *client_socket_ptr)
+void client_socket_queue_add(SocketClientQueueType *client_socket_queue_ptr, SocketClientType *client_socket_ptr)
 {
-    SocketClient_t *head_client_socket_ptr = NULL;
+    SocketClientType *head_client_socket_ptr = NULL;
 
     head_client_socket_ptr = client_socket_queue_ptr->head_client_socket_ptr;
 

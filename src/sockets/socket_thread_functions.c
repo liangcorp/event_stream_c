@@ -54,18 +54,18 @@ void *hello_fun(void *thread_worker_void_ptr)
 }
 
 /* create a pool of threads with value of 0 */
-SocketThreadPool_t thread_pool_create(void)
+SocketThreadPoolType thread_pool_create(void)
 {
     // const unsigned int MAX_THREAD_NUMBER = sysconf(_SC_NPROCESSORS_ONLN) + 1;
 
-    static SocketThreadWorker_t socket_thread_worker[MAX_THREAD_NUMBER];
+    static SocketThreadWorkerType socket_thread_worker[MAX_THREAD_NUMBER];
 
     for (int i = 0; i < MAX_THREAD_NUMBER; i++)
     {
         socket_thread_worker[i].thread_value = 0;
     }
 
-    SocketThreadPool_t st_pool;
+    SocketThreadPoolType st_pool;
     st_pool.socket_thread_worker_ptr = socket_thread_worker;
     st_pool.no_of_threads = MAX_THREAD_NUMBER;
 

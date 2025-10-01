@@ -11,22 +11,22 @@ typedef struct SocketThreadVariables
     int sock;
     char *message;
     unsigned int message_length;
-} SocketThreadVariables_t;
+} SocketThreadVariablesType;
 
 typedef struct SocketClient
 {
     int client_socket;
     _Bool is_serviced;
     struct SocketClient *next_client_socket_ptr;
-} SocketClient_t;
+} SocketClientType;
 
 typedef struct SocketClientQueue
 {
     struct SocketClient *head_client_socket_ptr;
     unsigned int no_of_waiting_clients;
-} SocketClientQueue_t;
+} SocketClientQueueType;
 
-Result_t *socket_create(short *h_socket_ptr);
-Result_t *bind_created_socket(short h_socket, unsigned int port_number);
+ResultType *socket_create(short *h_socket_ptr);
+ResultType *bind_created_socket(short h_socket, unsigned int port_number);
 void *client_socket_queue_manage(void *socket_queue);
-void client_socket_queue_add(SocketClientQueue_t *client_socket_queue_ptr, SocketClient_t *client_socket_ptr);
+void client_socket_queue_add(SocketClientQueueType *client_socket_queue_ptr, SocketClientType *client_socket_ptr);

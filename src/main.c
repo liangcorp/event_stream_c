@@ -27,7 +27,7 @@ int main(void)
     struct sockaddr_in client;
 
     /* Create socket */
-    Result_t *socket_create_result = socket_create(&socket_descriptor);
+    ResultType *socket_create_result = socket_create(&socket_descriptor);
 
     switch (socket_create_result->result_enum)
     {
@@ -45,7 +45,7 @@ int main(void)
     }
 
     /* Bind socket */
-    Result_t *socket_bind_result = bind_created_socket(socket_descriptor, PORT_NUMBER);
+    ResultType *socket_bind_result = bind_created_socket(socket_descriptor, PORT_NUMBER);
 
     switch (socket_bind_result->result_enum)
     {
@@ -70,7 +70,7 @@ int main(void)
     }
 
 
-    SocketClientQueue_t client_socket_queue;
+    SocketClientQueueType client_socket_queue;
     client_socket_queue.head_client_socket_ptr = NULL;
     client_socket_queue.no_of_waiting_clients = 0;
 
@@ -85,7 +85,7 @@ int main(void)
                 __FILE__, __LINE__, strerror(errsv));
     }
 
-    SocketThreadPool_t socket_thread_pool = thread_pool_create();
+    SocketThreadPoolType socket_thread_pool = thread_pool_create();
 
     /* Accepting incoming connections */
     while (1)
@@ -106,8 +106,8 @@ int main(void)
         printf("Connection accepted\n");
 
         // @TODO free this memory when socket is used and closed
-        SocketClient_t *client_socket_ptr = NULL;
-        client_socket_ptr = calloc(1, sizeof(SocketClient_t));
+        SocketClientType *client_socket_ptr = NULL;
+        client_socket_ptr = calloc(1, sizeof(SocketClientType));
         client_socket_ptr->client_socket = socket_accept_connection;
         client_socket_ptr->is_serviced = 0;
         client_socket_ptr->next_client_socket_ptr = NULL;
